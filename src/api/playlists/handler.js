@@ -12,6 +12,7 @@ class PlaylistsHandler {
         this.postSongToPlaylistHandler = this.postSongToPlaylistHandler.bind(this)
         this.getSongsFromPlaylistHandler = this.getSongsFromPlaylistHandler.bind(this)
         this.deleteSongFromPlaylistHandler = this.deleteSongFromPlaylistHandler.bind(this)
+        this.getPlaylistActivitiesHandler = this.getPlaylistActivitiesHandler.bind(this)
     }
 
     async postPlaylistHandler (request, h) {
@@ -136,6 +137,7 @@ class PlaylistsHandler {
 
             await this._service.verifyPlaylistOwner(id, credentialId)
             await this._service.addSongToPlaylist(id, songId)
+            await this._service.addActivity(id, songId, credentialId)
 
             const response = h.response({
                 status: 'success',
@@ -215,10 +217,48 @@ class PlaylistsHandler {
 
             await this._service.verifyPlaylistOwner(id, credentialId)
             await this._service.deleteSongFromPlaylist(id, songId)
+            await this._service.deleteActivity(id, songId, credentialId)
 
             const response = h.response({
                 status: 'success',
                 message: 'Berhasil menghapus lagu dari playlist.'
+            })
+
+            response.code(200)
+            return response
+        } catch (error) {
+            if (error instanceof ClientError) {
+                const response = h.response({
+                    status: 'fail',
+                    message: error.message
+                })
+
+                response.code(error.statusCode)
+                return response
+            }
+
+            const response = h.response({
+                status: 'error',
+                message: 'Maaf, terjadi kegagalan pada server kami.'
+            })
+
+            response.code(500)
+            console.error(error)
+            return response
+        }
+    }
+
+    async getPlaylistActivitiesHandler (request, h) {
+        try {
+            const { id } = request.params
+            const { id: credentialId } = request.auth.credentials
+
+            await this._service.verifyPlaylistOwner(id, credentialId)
+            const activities = await this._service.getPlaylistActivities(id)
+
+            const response = h.response({
+                status: 'success',
+                data: activities
             })
 
             response.code(200)
