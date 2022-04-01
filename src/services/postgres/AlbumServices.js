@@ -47,6 +47,7 @@ class AlbumsService {
             id: resultAlbum.rows[0].id,
             name: resultAlbum.rows[0].name,
             year: resultAlbum.rows[0].year,
+            coverUrl: resultAlbum.rows[0].cover,
             songs: resultSongs.rows
         }
     }
@@ -75,6 +76,15 @@ class AlbumsService {
         if (!result.rows.length) {
             throw new NotFoundError('Album gagal dihapus. Id tidak ditemukan');
         }
+    }
+
+    async postAlbumCoverById (id, cover) {
+        const query = {
+            text: 'UPDATE albums SET cover = $1 WHERE id = $2',
+            values: [cover, id]
+        }
+
+        await this._pool.query(query)
     }
 }
 
