@@ -86,6 +86,67 @@ class AlbumsService {
 
         await this._pool.query(query)
     }
+
+    async postUserAlbumLikeById (userId, albumId) {
+        const queryAlbum = {
+            text: 'SELECT * FROM albums WHERE id = $1',
+            values: [albumId]
+        }
+
+        const resultAlbum = await this._pool.query(queryAlbum)
+
+        if (!resultAlbum.rows.length) {
+            throw new NotFoundError('Album tidak ditemukan');
+        }
+
+        const querySearchLike = {
+            text: 'SELECT * FROM user_album_likes WHERE user_id = $1 AND album_id = $2',
+            values: [userId, albumId]
+        }
+
+        const resultSearchLike = await this._pool.query(querySearchLike)
+
+        if (!resultSearchLike.rows.length) {
+            const id = `like-${nanoid(16)}`
+
+            const queryLike = {
+                text: 'INSERT INTO user_album_likes (id, user_id, album_id) VALUES ($1, $2, $3)',
+                values: [id, userId, albumId]
+            }
+
+            await this._pool.query(queryLike)
+            return 'Berhasil menyukai album'
+        } else {
+            const queryDeleteLike = {
+                text: 'DELETE FROM user_album_likes WHERE user_id = $1 AND album_id = $2',
+                values: [userId, albumId]
+            }
+
+            await this._pool.query(queryDeleteLike)
+            return 'Berhasil menghapus like album'
+        }
+    }
+
+    async getUserAlbumLikesById (albumId) {
+        const queryAlbum = {
+            text: 'SELECT * FROM albums WHERE id = $1',
+            values: [albumId]
+        }
+
+        const resultAlbum = await this._pool.query(queryAlbum)
+
+        if (!resultAlbum.rows.length) {
+            throw new NotFoundError('Album tidak ditemukan');
+        }
+
+        const queryLikes = {
+            text: 'SELECT COUNT(user_id) FROM user_album_likes WHERE album_id = $1',
+            values: [albumId]
+        }
+
+        const resultLikes = await this._pool.query(queryLikes)
+        return Number(resultLikes.rows[0].count)
+    }
 }
 
 module.exports = AlbumsService;
