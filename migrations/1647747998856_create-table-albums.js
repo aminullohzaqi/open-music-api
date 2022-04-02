@@ -1,8 +1,5 @@
 /* eslint-disable indent */
-/* eslint-disable semi */
 /* eslint-disable camelcase */
-
-exports.shorthands = undefined;
 
 exports.up = pgm => {
     pgm.createTable('albums', {
@@ -19,8 +16,8 @@ exports.up = pgm => {
             notNull: true
         }
     })
-};
+}
 
 exports.down = pgm => {
-    pgm.dropTable('albums');
-};
+    pgm.dropTable('albums')
+}

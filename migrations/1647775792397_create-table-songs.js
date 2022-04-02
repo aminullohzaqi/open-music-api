@@ -1,8 +1,5 @@
 /* eslint-disable indent */
-/* eslint-disable semi */
 /* eslint-disable camelcase */
-
-exports.shorthands = undefined;
 
 exports.up = pgm => {
     pgm.createTable('songs', {
@@ -35,9 +32,9 @@ exports.up = pgm => {
             type: 'varchar(100)',
             notNull: false
         }
-    });
-};
+    })
+}
 
 exports.down = pgm => {
-    pgm.dropTable('songs');
-};
+    pgm.dropTable('songs')
+}

@@ -11,7 +11,7 @@ class PlaylistsService {
     }
 
     async addPlaylist ({ name, owner }) {
-        const id = 'playlist-' + nanoid(16)
+        const id = `playlist-${nanoid(16)}`
 
         const query = {
             text: 'INSERT INTO playlist (id, name, owner) VALUES ($1, $2, $3) RETURNING id',
@@ -69,7 +69,7 @@ class PlaylistsService {
             throw new NotFoundError('Lagu tidak ditemukan')
         }
 
-        const id = 'playlist_song-' + nanoid(16)
+        const id = `playlist_song-${nanoid(16)}`
 
         const query = {
             text: 'INSERT INTO playlist_songs (id, playlist_id, song_id) VALUES ($1, $2, $3)',
@@ -148,7 +148,7 @@ class PlaylistsService {
         const resultUser = await this._pool.query(queryUser)
         const username = resultUser.rows[0].username
 
-        const idActivities = 'activity-' + nanoid(16)
+        const idActivities = `activity-${nanoid(16)}`
         const timeActivity = new Date().toISOString()
 
         const queryActivities = {
@@ -176,7 +176,7 @@ class PlaylistsService {
         const resultUser = await this._pool.query(queryUser)
         const username = resultUser.rows[0].username
 
-        const idActivities = 'activity-' + nanoid(16)
+        const idActivities = `activity-${nanoid(16)}`
         const timeActivity = new Date().toISOString()
 
         const queryActivities = {
@@ -216,7 +216,7 @@ class PlaylistsService {
 
     async verifyPlaylistOwner (id, owner) {
         const query = {
-            text: 'SELECT * FROM playlist WHERE id = $1',
+            text: 'SELECT owner FROM playlist WHERE id = $1',
             values: [id]
         }
 

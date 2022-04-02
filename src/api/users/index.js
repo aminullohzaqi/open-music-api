@@ -1,7 +1,7 @@
+/* eslint-disable indent */
 const UsersHandler = require('./handler')
 const routes = require('./routes')
 
-/* eslint-disable indent */
 module.exports = {
     name: 'users',
     version: '1.0.0',

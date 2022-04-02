@@ -1,6 +1,6 @@
+/* eslint-disable indent */
 const ClientError = require('../../exceptions/ClientError')
 
-/* eslint-disable indent */
 class UsersHandler {
     constructor (service, validator) {
         this._service = service

@@ -1,4 +1,3 @@
-/* eslint-disable semi */
 /* eslint-disable indent */
 const path = require('path')
 
@@ -60,4 +59,4 @@ const routes = (handler) => [
     }
 ]
 
-module.exports = routes;
+module.exports = routes

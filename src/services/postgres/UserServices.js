@@ -21,13 +21,13 @@ class UsersServices {
             values: [id, username, hashedPassword, fullname]
         }
 
-        const result = await this._pool.query(query)
+        const { rows } = await this._pool.query(query)
 
-        if (!result.rows.length) {
+        if (!rows.length) {
             throw new InvariantError('User gagal ditambahkan.')
         }
 
-        return result.rows[0].id
+        return rows[0].id
     }
 
     async verifyNewUsername (username) {
@@ -36,9 +36,9 @@ class UsersServices {
             values: [username]
         }
 
-        const result = await this._pool.query(query)
+        const { rows } = await this._pool.query(query)
 
-        if (result.rows.length > 0) {
+        if (rows.length > 0) {
             throw new InvariantError('Gagal menambahkan user. Username sudah digunakan.')
         }
     }
@@ -49,13 +49,13 @@ class UsersServices {
             values: [userId]
         }
 
-        const result = await this._pool.query(query)
+        const { rows } = await this._pool.query(query)
 
-        if (!result.rows.length) {
+        if (!rows.length) {
             throw new NotFoundError('User tidak ditemukan.')
         }
 
-        return result.rows[0]
+        return rows[0]
     }
 
     async verifyUserCredential (username, password) {
@@ -64,13 +64,13 @@ class UsersServices {
             values: [username]
         }
 
-        const result = await this._pool.query(query)
+        const { rows } = await this._pool.query(query)
 
-        if (!result.rows.length) {
+        if (!rows.length) {
             throw new AuthenticationError('Kredensial yang Anda berikan salah')
         }
 
-        const { id, password: hashedPassword } = result.rows[0]
+        const { id, password: hashedPassword } = rows[0]
         const match = await bcrypt.compare(password, hashedPassword)
 
         if (!match) {
@@ -86,8 +86,8 @@ class UsersServices {
             values: [`%${username}%`]
         }
 
-        const result = await this._pool.query(query)
-        return result.rows
+        const { rows } = await this._pool.query(query)
+        return rows
     }
 }
 

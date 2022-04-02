@@ -60,15 +60,12 @@ class PlaylistsHandler {
             const { id: credentialId } = request.auth.credentials
             const playlists = await this._service.getPlaylists(credentialId)
 
-            const response = h.response({
+            return {
                 status: 'success',
                 data: {
                     playlists: playlists
                 }
-            })
-
-            response.code(200)
-            return response
+            }
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
@@ -99,13 +96,10 @@ class PlaylistsHandler {
             await this._service.verifyPlaylistOwner(id, credentialId)
             await this._service.deletePlaylistById(id)
 
-            const response = h.response({
+            return {
                 status: 'success',
                 message: 'Berhasil menghapus playlist.'
-            })
-
-            response.code(200)
-            return response
+            }
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
@@ -176,15 +170,12 @@ class PlaylistsHandler {
             await this._service.verifyPlaylistAccess(id, credentialId)
             const songs = await this._service.getSongsFromPlaylist(id)
 
-            const response = h.response({
+            return {
                 status: 'success',
                 data: {
                     playlist: songs
                 }
-            })
-
-            response.code(200)
-            return response
+            }
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
@@ -219,13 +210,10 @@ class PlaylistsHandler {
             await this._service.deleteSongFromPlaylist(id, songId)
             await this._service.deleteActivity(id, songId, credentialId)
 
-            const response = h.response({
+            return {
                 status: 'success',
                 message: 'Berhasil menghapus lagu dari playlist.'
-            })
-
-            response.code(200)
-            return response
+            }
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
@@ -256,13 +244,10 @@ class PlaylistsHandler {
             await this._service.verifyPlaylistAccess(id, credentialId)
             const activities = await this._service.getPlaylistActivities(id)
 
-            const response = h.response({
+            return {
                 status: 'success',
                 data: activities
-            })
-
-            response.code(200)
-            return response
+            }
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({

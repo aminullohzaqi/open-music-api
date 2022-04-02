@@ -15,9 +15,9 @@ class CollaborationsService {
             values: [userId]
         }
 
-        const resultUser = await this._pool.query(queryUser)
+        const { rows: resultUser } = await this._pool.query(queryUser)
 
-        if (!resultUser.rows.length) {
+        if (!resultUser.length) {
             throw new NotFoundError('User tidak ditemukan')
         }
 
@@ -28,13 +28,13 @@ class CollaborationsService {
             values: [id, playlistId, userId]
         }
 
-        const result = await this._pool.query(query)
+        const { rows } = await this._pool.query(query)
 
-        if (!result.rows.length) {
+        if (!rows.length) {
             throw new InvariantError('Kolaborasi gagal ditambahkan')
         }
 
-        return result.rows[0].id
+        return rows[0].id
     }
 
     async deleteCollaboration (playlistId, userId) {
@@ -43,9 +43,9 @@ class CollaborationsService {
             values: [playlistId, userId]
         }
 
-        const result = await this._pool.query(query)
+        const { rows } = await this._pool.query(query)
 
-        if (!result.rows.length) {
+        if (!rows.length) {
             throw new InvariantError('Kolaborasi gagal dihapus')
         }
     }
@@ -56,9 +56,9 @@ class CollaborationsService {
             values: [playlistId, userId]
         }
 
-        const result = await this._pool.query(query)
+        const { rows } = await this._pool.query(query)
 
-        if (!result.rows.length) {
+        if (!rows.length) {
             throw new InvariantError('Kolaborasi gagal diverifikasi')
         }
     }

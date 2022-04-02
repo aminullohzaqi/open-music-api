@@ -1,4 +1,3 @@
-/* eslint-disable semi */
 /* eslint-disable indent */
 const routes = (handler) => [
     {
@@ -26,6 +25,6 @@ const routes = (handler) => [
         path: '/songs/{id}',
         handler: handler.deleteSongByIdHandler
     }
-];
+]
 
-module.exports = routes;
+module.exports = routes

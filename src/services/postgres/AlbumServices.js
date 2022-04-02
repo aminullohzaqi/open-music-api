@@ -10,19 +10,19 @@ class AlbumsService {
     }
 
     async addAlbum ({ name, year }) {
-        const id = 'album-' + nanoid(16)
+        const id = `album-${nanoid(16)}`
 
         const query = {
             text: 'INSERT INTO albums (id, name, year) VALUES ($1, $2, $3) RETURNING id',
             values: [id, name, year]
         }
 
-        const result = await this._pool.query(query)
+        const { rows } = await this._pool.query(query)
 
-        if (!result.rows[0].id) {
+        if (!rows[0].id) {
             throw new Error('Album gagal ditambahkan')
         }
-        return result.rows[0].id
+        return rows[0].id
     }
 
     async getAlbumById (id) {
@@ -36,19 +36,19 @@ class AlbumsService {
             values: [id]
         }
 
-        const resultAlbum = await this._pool.query(queryAlbum)
-        const resultSongs = await this._pool.query(querySongs)
+        const { rows: resultAlbum } = await this._pool.query(queryAlbum)
+        const { rows: resultSongs } = await this._pool.query(querySongs)
 
-        if (!resultAlbum.rows.length) {
+        if (!resultAlbum.length) {
             throw new NotFoundError('Album tidak ditemukan')
         }
 
         return {
-            id: resultAlbum.rows[0].id,
-            name: resultAlbum.rows[0].name,
-            year: resultAlbum.rows[0].year,
-            coverUrl: resultAlbum.rows[0].cover,
-            songs: resultSongs.rows
+            id: resultAlbum[0].id,
+            name: resultAlbum[0].name,
+            year: resultAlbum[0].year,
+            coverUrl: resultAlbum[0].cover,
+            songs: resultSongs
         }
     }
 
@@ -58,9 +58,9 @@ class AlbumsService {
             values: [name, year, id]
         }
 
-        const result = await this._pool.query(query)
+        const { rows } = await this._pool.query(query)
 
-        if (!result.rows.length) {
+        if (!rows.length) {
             throw new NotFoundError('Album gagal diedit. Id tidak ditemukan')
         }
     }
@@ -71,9 +71,9 @@ class AlbumsService {
             values: [id]
         }
 
-        const result = await this._pool.query(query)
+        const { rows } = await this._pool.query(query)
 
-        if (!result.rows.length) {
+        if (!rows.length) {
             throw new NotFoundError('Album gagal dihapus. Id tidak ditemukan')
         }
     }
@@ -93,9 +93,9 @@ class AlbumsService {
             values: [albumId]
         }
 
-        const resultAlbum = await this._pool.query(queryAlbum)
+        const { rows: resultAlbum } = await this._pool.query(queryAlbum)
 
-        if (!resultAlbum.rows.length) {
+        if (!resultAlbum.length) {
             throw new NotFoundError('Album tidak ditemukan')
         }
 
@@ -104,9 +104,9 @@ class AlbumsService {
             values: [userId, albumId]
         }
 
-        const resultSearchLike = await this._pool.query(querySearchLike)
+        const { rows: resultSearchLike } = await this._pool.query(querySearchLike)
 
-        if (!resultSearchLike.rows.length) {
+        if (!resultSearchLike.length) {
             const id = `like-${nanoid(16)}`
 
             const queryLike = {
@@ -144,9 +144,9 @@ class AlbumsService {
                 values: [albumId]
             }
 
-            const resultAlbum = await this._pool.query(queryAlbum)
+            const { rows: resultAlbum } = await this._pool.query(queryAlbum)
 
-            if (!resultAlbum.rows.length) {
+            if (!resultAlbum.length) {
                 throw new NotFoundError('Album tidak ditemukan')
             }
 
@@ -155,8 +155,8 @@ class AlbumsService {
                 values: [albumId]
             }
 
-            const resultLikes = await this._pool.query(queryLikes)
-            const resultLikesNumber = Number(resultLikes.rows[0].count)
+            const { rows: resultLikes } = await this._pool.query(queryLikes)
+            const resultLikesNumber = Number(resultLikes[0].count)
 
             await this._cacheService.set(`album-likes:${albumId}`, JSON.stringify(resultLikesNumber))
 

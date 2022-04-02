@@ -63,13 +63,10 @@ class CollaborationsHandler {
             await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId)
             await this._collaborationsService.deleteCollaboration(playlistId, userId)
 
-            const response = h.response({
+            return {
                 status: 'success',
                 message: 'Kolaborasi berhasil dihapus'
-            })
-
-            response.code(200)
-            return response
+            }
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
