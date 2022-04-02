@@ -11,7 +11,5 @@
         "ecmaVersion": "latest"
     },
     "rules": {
-        "no-extra-semi": "off",
-        "no-indent": "off"
     }
 }

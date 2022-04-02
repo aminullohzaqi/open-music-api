@@ -1,163 +1,162 @@
-/* eslint-disable semi */
 /* eslint-disable indent */
 
-const ClientError = require('../../exceptions/ClientError');
+const ClientError = require('../../exceptions/ClientError')
 
 class AlbumsHandler {
     constructor (service, storageService, validator) {
-        this._service = service;
-        this._storageService = storageService;
-        this._validator = validator;
+        this._service = service
+        this._storageService = storageService
+        this._validator = validator
 
-        this.postAlbumHandler = this.postAlbumHandler.bind(this);
-        this.getAlbumByIdHandler = this.getAlbumByIdHandler.bind(this);
-        this.putAlbumByIdHandler = this.putAlbumByIdHandler.bind(this);
-        this.deleteAlbumByIdHandler = this.deleteAlbumByIdHandler.bind(this);
-        this.postUploadCoverHandler = this.postUploadCoverHandler.bind(this);
-        this.postAlbumLikeHandler = this.postAlbumLikeHandler.bind(this);
-        this.getAlbumLikesHandler = this.getAlbumLikesHandler.bind(this);
+        this.postAlbumHandler = this.postAlbumHandler.bind(this)
+        this.getAlbumByIdHandler = this.getAlbumByIdHandler.bind(this)
+        this.putAlbumByIdHandler = this.putAlbumByIdHandler.bind(this)
+        this.deleteAlbumByIdHandler = this.deleteAlbumByIdHandler.bind(this)
+        this.postUploadCoverHandler = this.postUploadCoverHandler.bind(this)
+        this.postAlbumLikeHandler = this.postAlbumLikeHandler.bind(this)
+        this.getAlbumLikesHandler = this.getAlbumLikesHandler.bind(this)
     }
 
     async postAlbumHandler (request, h) {
         try {
-            this._validator.validateAlbumPayload(request.payload);
-            const { name, year } = request.payload;
+            this._validator.validateAlbumPayload(request.payload)
+            const { name, year } = request.payload
 
-            const Id = await this._service.addAlbum({ name, year });
+            const Id = await this._service.addAlbum({ name, year })
 
             const response = h.response({
                 status: 'success',
                 data: {
                     albumId: Id
                 }
-            });
+            })
 
-            response.code(201);
-            return response;
+            response.code(201)
+            return response
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
                     status: 'fail',
                     message: error.message
-                });
+                })
 
-                response.code(error.statusCode);
-                return response;
+                response.code(error.statusCode)
+                return response
             }
 
             const response = h.response({
                 status: 'error',
                 message: 'Maaf, terjadi kegagalan pada server kami.'
-            });
+            })
 
-            response.code(500);
-            console.error(error);
-            return response;
+            response.code(500)
+            console.error(error)
+            return response
         }
     }
 
     async getAlbumByIdHandler (request, h) {
         try {
-            const { id } = request.params;
-            const album = await this._service.getAlbumById(id);
+            const { id } = request.params
+            const album = await this._service.getAlbumById(id)
 
             const response = h.response({
                 status: 'success',
                 data: {
                     album
                 }
-            });
+            })
 
-            response.code(200);
-            return response;
+            response.code(200)
+            return response
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
                     status: 'fail',
                     message: error.message
-                });
+                })
 
-                response.code(error.statusCode);
-                return response;
+                response.code(error.statusCode)
+                return response
             }
 
             const response = h.response({
                 status: 'error',
                 message: 'Maaf, terjadi kegagalan pada server kami.'
-            });
+            })
 
-            response.code(500);
-            console.error(error);
-            return response;
+            response.code(500)
+            console.error(error)
+            return response
         }
     }
 
     async putAlbumByIdHandler (request, h) {
         try {
-            this._validator.validateAlbumPayload(request.payload);
-            const { id } = request.params;
-            await this._service.editAlbumById(id, request.payload);
+            this._validator.validateAlbumPayload(request.payload)
+            const { id } = request.params
+            await this._service.editAlbumById(id, request.payload)
 
             const response = h.response({
                 status: 'success',
                 message: 'Album berhasil diedit'
-            });
+            })
 
-            response.code(200);
-            return response;
+            response.code(200)
+            return response
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
                     status: 'fail',
                     message: error.message
-                });
+                })
 
-                response.code(error.statusCode);
-                return response;
+                response.code(error.statusCode)
+                return response
             }
 
             const response = h.response({
                 status: 'error',
                 message: 'Maaf, terjadi kegagalan pada server kami.'
-            });
+            })
 
-            response.code(500);
-            console.error(error);
-            return response;
+            response.code(500)
+            console.error(error)
+            return response
         }
     }
 
     async deleteAlbumByIdHandler (request, h) {
         try {
-            const { id } = request.params;
-            await this._service.deleteAlbumById(id);
+            const { id } = request.params
+            await this._service.deleteAlbumById(id)
 
             const response = h.response({
                 status: 'success',
                 message: 'Album berhasil dihapus'
-            });
+            })
 
-            response.code(200);
-            return response;
+            response.code(200)
+            return response
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
                     status: 'fail',
                     message: error.message
-                });
+                })
 
-                response.code(error.statusCode);
-                return response;
+                response.code(error.statusCode)
+                return response
             }
 
             const response = h.response({
                 status: 'error',
                 message: 'Maaf, terjadi kegagalan pada server kami.'
-            });
+            })
 
-            response.code(500);
-            console.error(error);
-            return response;
+            response.code(500)
+            console.error(error)
+            return response
         }
     }
 
@@ -184,20 +183,20 @@ class AlbumsHandler {
                 const response = h.response({
                     status: 'fail',
                     message: error.message
-                });
+                })
 
-                response.code(error.statusCode);
-                return response;
+                response.code(error.statusCode)
+                return response
             }
 
             const response = h.response({
                 status: 'error',
                 message: 'Maaf, terjadi kegagalan pada server kami.'
-            });
+            })
 
-            response.code(500);
-            console.error(error);
-            return response;
+            response.code(500)
+            console.error(error)
+            return response
         }
     }
 
@@ -220,20 +219,20 @@ class AlbumsHandler {
                 const response = h.response({
                     status: 'fail',
                     message: error.message
-                });
+                })
 
-                response.code(error.statusCode);
-                return response;
+                response.code(error.statusCode)
+                return response
             }
 
             const response = h.response({
                 status: 'error',
                 message: 'Maaf, terjadi kegagalan pada server kami.'
-            });
+            })
 
-            response.code(500);
-            console.error(error);
-            return response;
+            response.code(500)
+            console.error(error)
+            return response
         }
     }
 
@@ -243,33 +242,40 @@ class AlbumsHandler {
 
             const likes = await this._service.getUserAlbumLikesById(albumId)
 
-            return h.response({
+            const response = h.response({
                 status: 'success',
                 data: {
-                    likes: likes
+                    likes: likes.albumLikes
                 }
             })
+
+            if (likes.source === 'cache') {
+                response.header('X-Data-Source', 'cache')
+                return response
+            }
+
+            return response
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
                     status: 'fail',
                     message: error.message
-                });
+                })
 
-                response.code(error.statusCode);
-                return response;
+                response.code(error.statusCode)
+                return response
             }
 
             const response = h.response({
                 status: 'error',
                 message: 'Maaf, terjadi kegagalan pada server kami.'
-            });
+            })
 
-            response.code(500);
-            console.error(error);
-            return response;
+            response.code(500)
+            console.error(error)
+            return response
         }
     }
 };
 
-module.exports = AlbumsHandler;
+module.exports = AlbumsHandler
