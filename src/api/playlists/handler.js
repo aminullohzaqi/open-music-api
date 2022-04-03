@@ -60,12 +60,18 @@ class PlaylistsHandler {
             const { id: credentialId } = request.auth.credentials
             const playlists = await this._service.getPlaylists(credentialId)
 
-            return {
+            const response = h.response({
                 status: 'success',
                 data: {
-                    playlists: playlists
+                    playlists: playlists.playlist
                 }
+            })
+
+            if (playlists.source === 'cache') {
+                response.header('X-Data-Source', 'cache')
             }
+
+            return response
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
