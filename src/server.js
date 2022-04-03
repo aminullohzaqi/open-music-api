@@ -53,7 +53,7 @@ const init = async () => {
     const collaborationsService = new CollaborationsService(cacheService)
     const playlistsService = new PlaylistsService(collaborationsService, cacheService)
     const albumsService = new AlbumsService(cacheService)
-    const songsService = new SongsService()
+    const songsService = new SongsService(cacheService)
     const usersService = new UsersService()
     const authenticationsService = new AuthenticationsService()
     const storageService = new StorageService(path.resolve(__dirname, 'api/albums/file/covers'))

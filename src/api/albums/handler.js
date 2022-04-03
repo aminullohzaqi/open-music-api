@@ -60,12 +60,18 @@ class AlbumsHandler {
             const { id } = request.params
             const album = await this._service.getAlbumById(id)
 
-            return {
+            const response = h.response({
                 status: 'success',
                 data: {
-                    album
+                    album: album.albumSongs
                 }
+            })
+
+            if (album.source === 'cache') {
+                response.header('X-Data-Source', 'cache')
             }
+
+            return response
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
