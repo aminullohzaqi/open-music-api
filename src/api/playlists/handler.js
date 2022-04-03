@@ -176,12 +176,18 @@ class PlaylistsHandler {
             await this._service.verifyPlaylistAccess(id, credentialId)
             const songs = await this._service.getSongsFromPlaylist(id)
 
-            return {
+            const response = h.response({
                 status: 'success',
                 data: {
-                    playlist: songs
+                    playlist: songs.playlistSongs
                 }
+            })
+
+            if (songs.source === 'cache') {
+                response.header('X-Data-Source', 'cache')
             }
+
+            return response
         } catch (error) {
             if (error instanceof ClientError) {
                 const response = h.response({
