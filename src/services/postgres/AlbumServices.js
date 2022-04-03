@@ -104,6 +104,7 @@ class AlbumsService {
         }
 
         await this._pool.query(query)
+        await this._cacheService.delete(`album-songs:${id}`)
     }
 
     async postUserAlbumLikeById (userId, albumId) {
